@@ -6,8 +6,10 @@ const passport = require("passport");
 const authRoutes = require("./routes/authRoutes");
 const facebookAuthRoutes = require("./routes/facebookAuthRoutes");
 const billingRoutes = require("./routes/billingRoutes");
+const surveyRoutes = require("./routes/surveyRoutes");
 const keys = require("./config/keys");
 require("./models/User");
+require("./models/Survey");
 require("./services/passport");
 const PORT = process.env.PORT || 5000;
 
@@ -32,6 +34,7 @@ app.use(passport.session());
 app.use(authRoutes);
 app.use(facebookAuthRoutes);
 app.use(billingRoutes);
+app.use(surveyRoutes);
 
 if (process.env.NODE_ENV === "production") {
   // Express will serve up production assets

@@ -25,6 +25,7 @@ class Header extends Component {
             </li>
             <li>
               <a href="/api/logout">LogOut</a>
+              {/* <Link to="/api/logout">Log Out</Link> */}
             </li>
           </React.Fragment>
         );

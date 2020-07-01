@@ -8,4 +8,6 @@ module.exports = {
   cookieKey: process.env.COOKIE_KEY,
   strikePublishableKey: process.env.STRIKE_PUBLISHABLE_KEY,
   strikeSecretKey: process.env.STRIKE_SECRET_KEY,
+  sendGridKey: process.env.SEND_GRID_KEY,
+  redirectDomain: process.env.REDIRECT_DOMAIN,
 };
