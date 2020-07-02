@@ -92,4 +92,11 @@ router.post("/api/surveys/webhooks", (req, res) => {
   res.send({});
 });
 
+router.get("/api/surveys", requireLogin, async (req, res) => {
+  const surveys = await Survey.find({ _user: req.user.id }).select({
+    recipients: false,
+  });
+  res.send(surveys);
+});
+
 module.exports = router;
