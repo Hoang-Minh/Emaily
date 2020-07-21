@@ -9,6 +9,7 @@ const requireLogin = require("../middlewares/requireLogin");
 const requireCredits = require("../middlewares/requireCredits");
 const Mailer = require("../services/Mailer");
 const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
+const User = require("../models/User");
 
 router.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
   const { title, subject, body, recipients } = req.body;
@@ -33,6 +34,36 @@ router.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
   } catch (error) {
     res.status(422).send(error);
   }
+});
+
+router.delete("/api/surveys/:surveyId", requireLogin, async (req, res) => {
+  const survey = await Survey.findById(req.params.surveyId);
+  const user = await User.findById(req.user.id);
+  survey.remove();
+  user.credits += 1;
+  await user.save();
+  res.json(survey);
+});
+
+// pagination
+router.get("/api/surveys/pages/:pageNumber", requireLogin, async (req, res) => {
+  // if pageNumber is 1, then /api/surveys/pages/:pageNumber ---> /api/surveys/pages/0
+  const resultPerPage = 3;
+  const { pageNumber } = req.params;
+  const page = Math.max(0, parseInt(pageNumber) - 1);
+  console.log(page);
+
+  const surveys = await Survey.find({ _user: req.user.id })
+    .select({
+      recipients: false,
+    })
+    .skip(resultPerPage * page)
+    .limit(resultPerPage)
+    .exec();
+
+  console.log(surveys);
+
+  res.send(surveys);
 });
 
 router.get("/api/surveys/:surveyId/:choice", (req, res) => {
